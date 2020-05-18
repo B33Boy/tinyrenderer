@@ -24,10 +24,12 @@ struct TGAColor {
     unsigned char bgra[4];
     unsigned char bytespp;
 
+	// Initialize as black by default
     TGAColor() : bgra(), bytespp(1) {
         for (int i=0; i<4; i++) bgra[i] = 0;
     }
 
+	// Initialize to given colour
     TGAColor(unsigned char R, unsigned char G, unsigned char B, unsigned char A=255) : bgra(), bytespp(4) {
         bgra[0] = B;
         bgra[1] = G;
@@ -35,12 +37,13 @@ struct TGAColor {
         bgra[3] = A;
     }
 
+	// Initialize using uniform value for all elements in bgra
     TGAColor(unsigned char v) : bgra(), bytespp(1) {
         for (int i=0; i<4; i++) bgra[i] = 0;
         bgra[0] = v;
     }
 
-
+	// Initialize using character array
     TGAColor(const unsigned char *p, unsigned char bpp) : bgra(), bytespp(bpp) {
         for (int i=0; i<(int)bpp; i++) {
             bgra[i] = p[i];
@@ -50,10 +53,14 @@ struct TGAColor {
         }
     }
 
+	// Overloading access operator so that TGAImage[i] gives the value for the ith element in bgra array
     unsigned char& operator[](const int i) { return bgra[i]; }
 
+	// Overloading reference operator 
     TGAColor operator *(float intensity) const {
+		// Pointer to current object
         TGAColor res = *this;
+		// Limit intensity to be between 0 and 1
         intensity = (intensity>1.f?1.f:(intensity<0.f?0.f:intensity));
         for (int i=0; i<4; i++) res.bgra[i] = bgra[i]*intensity;
         return res;

@@ -7,31 +7,35 @@
 
 TGAImage::TGAImage() : data(NULL), width(0), height(0), bytespp(0) {}
 
+// When only height and width are given, fill with 0s
 TGAImage::TGAImage(int w, int h, int bpp) : data(NULL), width(w), height(h), bytespp(bpp) {
     unsigned long nbytes = width*height*bytespp;
     data = new unsigned char[nbytes];
-    memset(data, 0, nbytes);
+    memset(data, 0, nbytes); // memset fills memory in data with value 0
 }
 
+// When image is given, copy it
 TGAImage::TGAImage(const TGAImage &img) : data(NULL), width(img.width), height(img.height), bytespp(img.bytespp) {
     unsigned long nbytes = width*height*bytespp;
     data = new unsigned char[nbytes];
     memcpy(data, img.data, nbytes);
 }
 
+// Destructor
 TGAImage::~TGAImage() {
     if (data) delete [] data;
 }
 
+// Overloaded assignment operator to copy over data from another image without first creating a new image
 TGAImage & TGAImage::operator =(const TGAImage &img) {
     if (this != &img) {
-        if (data) delete [] data;
+        if (data) delete [] data; // Delete the current data array
         width  = img.width;
         height = img.height;
         bytespp = img.bytespp;
         unsigned long nbytes = width*height*bytespp;
         data = new unsigned char[nbytes];
-        memcpy(data, img.data, nbytes);
+        memcpy(data, img.data, nbytes); // Copy over the data 
     }
     return *this;
 }
